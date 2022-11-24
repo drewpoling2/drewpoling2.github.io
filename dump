@@ -1,0 +1,49 @@
+const express = require('express');
+const app = express();
+const PORT = 8080;
+
+app.use(express.json());
+
+app.get('/', (req, res) => {
+res.status(200).send({
+id: 'testID',
+});
+});
+
+const dscoHost = 'api.dsco.com';
+
+app.post(`${dscoHost}/api/v3/oauth2/token HTTP/1.1`, (req, res) => {
+const username = req.body.username;
+const name = req.body.name;
+const password = req.body.password;
+console.log(res);
+bcrypt.hash(password, saltRounds, (err, hash) => {
+if (err) {
+console.log(err);
+}
+
+    db.query(
+      'INSERT INTO users (username, name, password) VALUES (?,?,?)',
+      [username, name, hash],
+      (err, result) => {
+        console.log(err);
+      }
+    );
+
+});
+});
+
+app.post('/bearwood/:id', (req, res) => {
+const { id } = req.params;
+const { logo } = req.body;
+
+if (!logo) {
+res.status(418).send({ message: 'Error here!!!' });
+}
+
+res.send({
+dogBowl: `this is the logo ${logo} and this is the id ${id}`,
+});
+});
+
+app.listen(PORT, () => console.log(`running on ${PORT}`));

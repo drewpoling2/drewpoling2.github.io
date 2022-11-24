@@ -1,0 +1,62 @@
+const APP_ID = `2uq1o18ar7nqnc21sp2mpfi55i`;
+const APP_SECRET = `1vplaa8oiabeah8p74ojmqpigq3u0ko1bo7d6vp5r0a55t5uh77`;
+const TOKEN_ENDPOINT = 'https://api.dsco.io/api/v3/oauth2/token';
+const PORT = 3045;
+
+const api = axios.create({
+  baseURL: `http://localhost:3000/dsco-integration`,
+});
+
+const axios = require('axios');
+const qs = require('qs');
+
+axios.defaults.headers.post['Content-Type'] =
+  'application/x-www-form-urlencoded';
+
+const tokenData = {
+  grant_type: 'client_credentials',
+  client_id: APP_ID,
+  client_secret: APP_SECRET,
+};
+
+const getData = {
+  end_date: '',
+  start_date: '',
+  action: 'export',
+};
+
+const postData = {
+  carrier: '',
+  order_number: '',
+  action: 'shipnotify',
+  service: '',
+  tracking_number: '',
+};
+
+axios
+  .post(TOKEN_ENDPOINT, qs.stringify(tokenData))
+  .then((response) => {
+    let token = response.data.access_token;
+    console.log(token);
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+
+axios
+  .get('/get-data', qs.stringify(getData))
+  .then((response) => {
+    console.log(response.data);
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+
+axios
+  .post('/post-data', qs.stringify(postData))
+  .then((response) => {
+    console.log(response.data);
+  })
+  .catch((error) => {
+    console.log(error);
+  });

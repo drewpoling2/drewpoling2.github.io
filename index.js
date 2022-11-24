@@ -69,6 +69,9 @@ axios
       .then((response) => {
         app.get('/', (req, res) => {
           let xml = convertJsonToXml(response.data);
+          let xmlChildren = xmlDoc.getElementsByTagName('orders');
+          xmlDoc.createElement('parentNode');
+          xmlDoc.getElementsByTagName('parentNode').appendChild(xmlChildren);
           res.send(xml);
         });
       })

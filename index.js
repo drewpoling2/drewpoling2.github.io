@@ -4,17 +4,14 @@ const TOKEN_ENDPOINT = 'https://api.dsco.io/api/v3/oauth2/token';
 const importData = require('./data.json');
 const express = require('express');
 const axios = require('axios');
-const port = 8080;
 const app = express();
-
+let port = process.env.PORT || 3000;
 app.listen(port, () => console.log('running api'));
+
 app.get('/', (req, res) => {
   res.send('running api');
 });
 const qs = require('qs');
-const api = axios.create({
-  baseURL: `http://localhost:8080/dsco-integration`,
-});
 axios.defaults.headers.post['Content-Type'] =
   'application/x-www-form-urlencoded';
 

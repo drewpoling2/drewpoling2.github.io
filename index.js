@@ -1,29 +1,38 @@
-const APP_ID = `2uq1o18ar7nqnc21sp2mpfi55i`;
-const APP_SECRET = `1vplaa8oiabeah8p74ojmqpigq3u0ko1bo7d6vp5r0a55t5uh77`;
+require('dotenv').config({
+  path: `.env`,
+});
+const basicAuth = require('express-basic-auth');
+
 const TOKEN_ENDPOINT = 'https://api.dsco.io/api/v3/oauth2/token';
 
-const username = 'admin';
-const password = 'adminpa55w0rd';
-
 const { json2xml } = require('xml-js');
-const importData = require('./data.json');
 const express = require('express');
 const axios = require('axios');
 const app = express();
-let port = process.env.PORT || 3000;
+
+app.use(basicAuth({
+  authorizer: (username, password) => {
+    const userMatches = basicAuth.safeCompare(username, 'bwadmin11')
+    const passwordMatches = basicAuth.safeCompare(password, 'bwsecret00')
+    return userMatches & passwordMatches
+  }
+}));
+
+app.get('/', (req, res) => {
+  res.send('authorized');
+});
+
+let port = process.env.PORT || 3001;
 app.listen(port, () => console.log('running api'));
 
-// app.get('/', (req, res) => {
-//   res.send('running api');
-// });
 const qs = require('qs');
 axios.defaults.headers.post['Content-Type'] =
   'application/x-www-form-urlencoded';
 
 const tokenData = {
   grant_type: 'client_credentials',
-  client_id: APP_ID,
-  client_secret: APP_SECRET,
+  client_id: process.env.DSCO_APP_ID,
+  client_secret: process.env.DSCO_APP_SECRET,
 };
 
 const getData = {
@@ -52,6 +61,7 @@ const convertJsonToXml = (jsonObj) => {
   }
 };
 
+//get
 axios
   .post(TOKEN_ENDPOINT, qs.stringify(tokenData))
   .then((response) => {
@@ -67,12 +77,11 @@ axios
         },
       })
       .then((response) => {
-        app.get('/', (req, res) => {
+        //console.log(response.data);
+        app.get('/get', (req, res) => {
+          app.use('api');
           let xml = convertJsonToXml(response.data);
-          let xmlChildren = xmlDoc.getElementsByTagName('orders');
-          xmlDoc.createElement('parentNode');
-          xmlDoc.getElementsByTagName('parentNode').appendChild(xmlChildren);
-          res.send(xml);
+          res.send(xml).then(() => {});
         });
       })
       .catch((error) => {
@@ -82,6 +91,32 @@ axios
   .catch((error) => {
     console.log(error);
   });
+
+// //post
+// axios
+//   .post(TOKEN_ENDPOINT, qs.stringify(tokenData))
+//   .then((response) => {
+//     return response.data.access_token;
+//   })
+//   .then((token) => {
+//     axios
+//       .post('/post', {
+//         headers: { Authorization: `Bearer ${token}` },
+//       })
+//       .then((response) => {
+//         const action = 'shipnotify';
+//         const order_number = response.data.order_number;
+//         const carrier = response.data.carrier;
+//         const service = response.data.service;
+//         const tracking_number = response.data.tracking_number;
+//       })
+//       .catch((error) => {
+//         console.log(error);
+//       });
+//   })
+//   .catch((error) => {
+//     console.log(error);
+//   });
 
 // expected output: Wed Oct 05 2011 16:48:00 GMT+0200 (CEST)
 // (note: your timezone may vary)

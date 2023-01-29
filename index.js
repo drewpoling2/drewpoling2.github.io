@@ -23,8 +23,6 @@ app.get('/', (req, res) => {
   res.send('authorized');
 });
 
-
-
 let port = process.env.PORT || 3002;
 app.listen(port, () => console.log(`running api at ${port}`));
 

@@ -11,21 +11,22 @@ const axios = require('axios');
 const app = express();
 const router = express.Router();
 
-app.use(basicAuth({
-  authorizer: (username, password) => {
-    const userMatches = basicAuth.safeCompare(username, 'bwadmin')
-    const passwordMatches = basicAuth.safeCompare(password, 'bwsecret00')
-    return userMatches & passwordMatches
-  }
-}));
-
+// app.use(basicAuth({
+//   authorizer: (username, password) => {
+//     const userMatches = basicAuth.safeCompare(username, 'bwadmin')
+//     const passwordMatches = basicAuth.safeCompare(password, 'bwsecret00')
+//     return userMatches & passwordMatches
+//   }
+// }));
 
 app.get('/', (req, res) => {
   res.send('authorized');
 });
 
-let port = process.env.PORT || 3001;
-app.listen(port, () => console.log('running api'));
+
+
+let port = process.env.PORT || 3002;
+app.listen(port, () => console.log(`running api at ${port}`));
 
 const qs = require('qs');
 axios.defaults.headers.post['Content-Type'] =
@@ -81,10 +82,7 @@ axios
       .then((response) => {
         
         app.get('/get', (req, res) => {
-          app.use('api');
           let xml = convertJsonToXml(response.data);
-          console.log(response.data);
-
           res.send(xml).then(() => {});
         });
       })

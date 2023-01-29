@@ -79,7 +79,7 @@ axios
       })
       .then((response) => {
         
-        app.get('/get', (req, res) => {
+        app.get('https://drewpoling2.github.io/get', (req, res) => {
           let xml = convertJsonToXml(response.data);
           res.send(xml).then(() => {});
         });

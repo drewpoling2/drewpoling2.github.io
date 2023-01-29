@@ -13,7 +13,7 @@ const router = express.Router();
 
 app.use(basicAuth({
   authorizer: (username, password) => {
-    const userMatches = basicAuth.safeCompare(username, 'bwadmin11')
+    const userMatches = basicAuth.safeCompare(username, 'bwadmin')
     const passwordMatches = basicAuth.safeCompare(password, 'bwsecret00')
     return userMatches & passwordMatches
   }

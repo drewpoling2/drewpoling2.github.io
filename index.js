@@ -9,6 +9,7 @@ const { json2xml } = require('xml-js');
 const express = require('express');
 const axios = require('axios');
 const app = express();
+const router = express.Router();
 
 app.use(basicAuth({
   authorizer: (username, password) => {
@@ -17,6 +18,7 @@ app.use(basicAuth({
     return userMatches & passwordMatches
   }
 }));
+
 
 app.get('/', (req, res) => {
   res.send('authorized');
@@ -77,10 +79,12 @@ axios
         },
       })
       .then((response) => {
-        //console.log(response.data);
+        
         app.get('/get', (req, res) => {
           app.use('api');
           let xml = convertJsonToXml(response.data);
+          console.log(response.data);
+
           res.send(xml).then(() => {});
         });
       })

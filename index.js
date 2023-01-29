@@ -23,8 +23,6 @@ app.get('/', (req, res) => {
   res.send('authorized');
 });
 
-
-
 let port = process.env.PORT || 3002;
 app.listen(port, () => console.log(`running api at ${port}`));
 
@@ -81,7 +79,7 @@ axios
       })
       .then((response) => {
         
-        app.get('/get', (req, res) => {
+        app.get('https://drewpoling2.github.io/get', (req, res) => {
           let xml = convertJsonToXml(response.data);
           res.send(xml).then(() => {});
         });
